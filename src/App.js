@@ -3,29 +3,31 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import FormTodo from './components/form_todo';
 import ListTodo from './components/list_todo';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import {Provider, useSelector, useDispatch} from 'react-redux';
+import {fetchData} from './actions';
+import axios from "axios";
 
 function App() {
+  let [todos, setTodo] = useState([]);
+  let dataTodos = useSelector((state)=>state) ;
+  let dispatch = useDispatch();
+  // useEffect(function(){
+  //   axios.get('https://60b33e621bec230017bf35d7.mockapi.io/todos')
+  //   .then(function (response) {
+  //     // handle success
+  //     console.log(response);
+  //     setTodo(response.data)
+  //   })
+  //   .catch(function (error) {
+  //     // handle error
+  //     console.log(error);
+  //   })
+  // },[])
 
-  let [todos, setTodo] = useState(
-    [
-      {
-        id: 1,
-        name: "Hoc HTML",
-        isDone: false
-      },
-      {
-        id: 2,
-        name: "Hoc CSS",
-        isDone: false
-      },
-      {
-        id: 3,
-        name: "Hoc JS",
-        isDone: false
-      }
-    ]
-  )
+  useEffect(function(){
+    // dispatch(fetchData());
+  }, [])
 
   function addTodos(name){
     
@@ -37,10 +39,15 @@ function App() {
     setTodo([item,...todos]);
   }
 
+  function loadData(){
+     dispatch(fetchData());
+  }
+
   return (
     <div>
+      <button onClick={loadData}>Load Data</button>
       <FormTodo addTodos={addTodos} />
-      <ListTodo todos={todos}/>
+      <ListTodo todos={dataTodos}/>
     </div>
   );
 }

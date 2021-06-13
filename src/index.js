@@ -3,11 +3,33 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+// import './generator';
+import {createStore, applyMiddleware} from 'redux';
+import {Provider, useSelector} from 'react-redux';
+import createSagaMiddleware from 'redux-saga';
+import {saga} from './saga';
+
+const sagaMiddleware = createSagaMiddleware()
+const defaultState = []
+function reducer(state=defaultState, action){
+  console.log(action.type);
+  switch (action.type) {
+    case "FETCH-CS":
+      
+      return action.payload;
+
+    default:
+      return state;
+  }
+}
+const store = createStore(reducer, applyMiddleware(sagaMiddleware ));
+
+sagaMiddleware.run(saga);
 
 ReactDOM.render(
-  <React.StrictMode>
+  <Provider store={store}>
     <App />
-  </React.StrictMode>,
+  </Provider>,
   document.getElementById('root')
 );
 
